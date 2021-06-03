@@ -1,38 +1,43 @@
 package ru.geekbrains.lyagaev.popularlibraries
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import com.github.terrakok.cicerone.androidx.AppNavigator
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
+import ru.geekbrains.lyagaev.popularlibraries.navigation.AndroidScreens
+import ru.geekbrains.lyagaev.popularlibraries.presenter.MainPresenter
 import ru.geekbrains.lyagaev.popularlibraries.databinding.ActivityMainBinding
+import ru.geekbrains.lyagaev.popularlibraries.view2.MainView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : MvpAppCompatActivity(), MainView {
 
-    private lateinit var binding: ActivityMainBinding
-    private val presenter = MainPresenter(this)
+    private val navigator = AppNavigator(this, R.id.container)
+
+    private val presenter by moxyPresenter { MainPresenter(App.instance.router, AndroidScreens()) }
+    private var vb: ActivityMainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val listener = View.OnClickListener {
-            presenter.counterClick(it.tag.toString().toInt())
-        }
-
-        binding?.btnCounter1?.setOnClickListener(listener)
-        binding?.btnCounter2?.setOnClickListener(listener)
-        binding?.btnCounter3?.setOnClickListener(listener)
+        vb = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(vb?.root)
     }
 
-    fun setButtonText(index: Int, text: String) {
-        when(index){
-            0 -> binding?.btnCounter1?.text = text
-            1 -> binding?.btnCounter2?.text = text
-            2 -> binding?.btnCounter3?.text = text
-        }
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        App.instance.navigatorHolder.setNavigator(navigator)
     }
 
+    override fun onPause() {
+        super.onPause()
+        App.instance.navigatorHolder.removeNavigator()
+    }
 
+    override fun onBackPressed() {
+        supportFragmentManager.fragments.forEach {
+            if(it is BackButtonListener && it.backPressed()){
+                return
+            }
+        }
+        presenter.backClicked()
+    }
 }
-
-

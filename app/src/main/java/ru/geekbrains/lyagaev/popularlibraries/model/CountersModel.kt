@@ -1,4 +1,4 @@
-package ru.geekbrains.lyagaev.popularlibraries
+package ru.geekbrains.lyagaev.popularlibraries.model
 
 class CountersModel {
     private val counters = mutableListOf(0, 0, 0)

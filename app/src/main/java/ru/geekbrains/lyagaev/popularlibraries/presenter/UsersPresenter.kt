@@ -14,6 +14,7 @@ import ru.geekbrains.lyagaev.popularlibraries.view2.UsersView
 var disposable: Disposable? = null
 
 class UsersPresenter(private val usersRepo: GithubUsersRepo, private val router: Router, private val screens: IScreens) : MvpPresenter<UsersView>() {
+
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
         override var itemClickListener: ((UserItemView) -> Unit)? = null
@@ -21,20 +22,10 @@ class UsersPresenter(private val usersRepo: GithubUsersRepo, private val router:
         override fun getCount() = users.size
 
         override fun bindView(view: UserItemView) {
-            disposable = Single.just(users[view.pos])
-                .filter() { it.login != "login1" }
-                .subscribe({
-                    onBindViewSuccess(view, it.login)
-                }, ::onBindViewError)
+            val user = users[view.pos]
+            view.setLogin(user.login)
         }
 
-        private fun onBindViewSuccess(view: UserItemView, login: String) {
-            view.setLogin(login)
-        }
-
-        private fun onBindViewError(error: Throwable) {
-            println("onError: ${error.message}")
-        }
     }
 
     val usersListPresenter = UsersListPresenter()
@@ -51,19 +42,17 @@ class UsersPresenter(private val usersRepo: GithubUsersRepo, private val router:
     }
 
     private fun loadData() {
-        usersRepo.getUsers()
-            .doOnComplete(::onLoadDataComplete
-            ).subscribe(
-                ::onLoadDataSuccess
-            )
+        disposable =
+                usersRepo
+                        .getUsers()
+                        ?.subscribe( { users -> subscribeUsers(users) }, { it.printStackTrace() })
     }
 
-    private fun onLoadDataComplete() {
+
+    private fun subscribeUsers(users: List<GithubUser>) {
+        usersListPresenter.users.clear()
+        usersListPresenter.users.addAll(users)
         viewState.updateList()
-    }
-
-    private fun onLoadDataSuccess(user: GithubUser) {
-        usersListPresenter.users.add(user)
     }
 
 

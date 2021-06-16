@@ -14,6 +14,9 @@ import ru.geekbrains.lyagaev.popularlibraries.presenter.UsersPresenter
 import ru.geekbrains.lyagaev.popularlibraries.view2.UsersView
 import ru.geekbrains.lyagaev.popularlibraries.databinding.FragmentUsersBinding
 import ru.geekbrains.lyagaev.popularlibraries.navigation.AndroidScreens
+import ru.geekbrains.lyagaev.popularlibraries.network.ApiHolder
+import ru.geekbrains.lyagaev.popularlibraries.repository.GithubUsersRepo
+import ru.geekbrains.lyagaev.popularlibraries.repository.RetrofitGithubUsersRepo
 import ru.geekbrains.lyagaev.popularlibraries.utils.ConverterImage
 import ru.geekbrains.lyagaev.popularlibraries.utils.Image
 
@@ -23,7 +26,12 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         fun newInstance() = UsersFragment()
     }
 
-    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(GithubUsersRepo(), App.instance.router, AndroidScreens(), ConverterImage(context), AndroidSchedulers.mainThread()) }
+    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(
+        RetrofitGithubUsersRepo(ApiHolder.api),
+        App.instance.router,
+        AndroidScreens(),
+        ConverterImage(context),
+        AndroidSchedulers.mainThread()) }
     var adapter: UsersRVAdapter? = null
 
     private var vb: FragmentUsersBinding? = null

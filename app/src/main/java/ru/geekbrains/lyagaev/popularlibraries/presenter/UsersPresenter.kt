@@ -2,10 +2,10 @@ package ru.geekbrains.lyagaev.popularlibraries.presenter
 
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
-import ru.geekbrains.lyagaev.popularlibraries.GithubUsersRepo
+import ru.geekbrains.lyagaev.popularlibraries.intarface.IGithubUsersRepo
+import ru.geekbrains.lyagaev.popularlibraries.repository.GithubUsersRepo
 import ru.geekbrains.lyagaev.popularlibraries.model.GithubUser
 import ru.geekbrains.lyagaev.popularlibraries.navigation.IScreens
 import ru.geekbrains.lyagaev.popularlibraries.utils.IConverter
@@ -15,7 +15,7 @@ import ru.geekbrains.lyagaev.popularlibraries.view2.UsersView
 
 var disposable: Disposable? = null
 
-class UsersPresenter(private val usersRepo: GithubUsersRepo, private val router: Router, private val screens: IScreens, private val converter: IConverter, private val mainThreadScheduler: Scheduler) : MvpPresenter<UsersView>() {
+class UsersPresenter(private val usersRepo: IGithubUsersRepo, private val router: Router, private val screens: IScreens, private val converter: IConverter, private val mainThreadScheduler: Scheduler) : MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()
@@ -25,7 +25,7 @@ class UsersPresenter(private val usersRepo: GithubUsersRepo, private val router:
 
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
-            view.setLogin(user.login)
+            user.login?.let { view.setLogin(it) }
         }
 
     }
@@ -47,7 +47,8 @@ class UsersPresenter(private val usersRepo: GithubUsersRepo, private val router:
         disposable =
                 usersRepo
                         .getUsers()
-                        ?.subscribe( { users -> subscribeUsers(users) }, { it.printStackTrace() })
+                        ?.subscribe( { users -> subscribeUsers(users) },
+                            { it.printStackTrace() })
     }
 
     private fun subscribeUsers(users: List<GithubUser>) {

@@ -12,7 +12,7 @@ class UserPresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.showLogin(user.login)
+        user.login?.let { viewState.showLogin(it) }
     }
 
     fun backPressed(): Boolean {

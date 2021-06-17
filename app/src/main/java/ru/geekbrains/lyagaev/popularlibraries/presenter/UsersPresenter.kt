@@ -26,6 +26,7 @@ class UsersPresenter(private val usersRepo: IGithubUsersRepo, private val router
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
             user.login?.let { view.setLogin(it) }
+            user.avatarUrl?.let {view.loadAvatar(it)}
         }
 
     }
@@ -46,9 +47,10 @@ class UsersPresenter(private val usersRepo: IGithubUsersRepo, private val router
     private fun loadData() {
         disposable =
                 usersRepo
-                        .getUsers()
-                        ?.subscribe( { users -> subscribeUsers(users) },
-                            { it.printStackTrace() })
+                    .getUsers()
+                    .observeOn(mainThreadScheduler)
+                    .subscribe( { users -> subscribeUsers(users) },
+                        { it.printStackTrace() })
     }
 
     private fun subscribeUsers(users: List<GithubUser>) {

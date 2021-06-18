@@ -18,6 +18,7 @@ import ru.geekbrains.lyagaev.popularlibraries.network.ApiHolder
 import ru.geekbrains.lyagaev.popularlibraries.presenter.UsersPresenter
 import ru.geekbrains.lyagaev.popularlibraries.repository.RetrofitGithubRepositoriesRepo
 import ru.geekbrains.lyagaev.popularlibraries.repository.RetrofitGithubUsersRepo
+import ru.geekbrains.lyagaev.popularlibraries.room.db.Database
 import ru.geekbrains.lyagaev.popularlibraries.utils.ConverterImage
 
 class UserFragment : MvpAppCompatFragment(), UserView {
@@ -29,7 +30,8 @@ class UserFragment : MvpAppCompatFragment(), UserView {
     var adapter: ReposotoriesRVAdapter? = null
 
     val presenter: UserPresenter by moxyPresenter { UserPresenter(
-        RetrofitGithubRepositoriesRepo(ApiHolder.api),
+        RetrofitGithubRepositoriesRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()),
+            Database.getInstance()),
         App.instance.router,
         user,
         AndroidSchedulers.mainThread()) }

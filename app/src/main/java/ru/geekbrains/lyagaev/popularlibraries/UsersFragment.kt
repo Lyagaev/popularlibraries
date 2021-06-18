@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import ru.geekbrains.lyagaev.popularlibraries.adapter.UsersRVAdapter
 import ru.geekbrains.lyagaev.popularlibraries.presenter.UsersPresenter
 import ru.geekbrains.lyagaev.popularlibraries.view2.UsersView
 import ru.geekbrains.lyagaev.popularlibraries.databinding.FragmentUsersBinding
 import ru.geekbrains.lyagaev.popularlibraries.navigation.AndroidScreens
 import ru.geekbrains.lyagaev.popularlibraries.network.ApiHolder
-import ru.geekbrains.lyagaev.popularlibraries.repository.GithubUsersRepo
 import ru.geekbrains.lyagaev.popularlibraries.repository.RetrofitGithubUsersRepo
 import ru.geekbrains.lyagaev.popularlibraries.utils.ConverterImage
 import ru.geekbrains.lyagaev.popularlibraries.utils.Image

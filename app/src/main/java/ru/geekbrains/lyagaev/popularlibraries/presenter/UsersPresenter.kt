@@ -15,7 +15,12 @@ import ru.geekbrains.lyagaev.popularlibraries.view2.UsersView
 
 var disposable: Disposable? = null
 
-class UsersPresenter(private val usersRepo: IGithubUsersRepo, private val router: Router, private val screens: IScreens, private val converter: IConverter, private val mainThreadScheduler: Scheduler) : MvpPresenter<UsersView>() {
+class UsersPresenter(
+    private val usersRepo: IGithubUsersRepo,
+    private val router: Router,
+    private val screens: IScreens,
+    private val converter: IConverter,
+    private val mainThreadScheduler: Scheduler) : MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()

@@ -1,4 +1,4 @@
-package ru.geekbrains.lyagaev.popularlibraries
+package ru.geekbrains.lyagaev.popularlibraries.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

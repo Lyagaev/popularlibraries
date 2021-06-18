@@ -1,4 +1,4 @@
-package ru.geekbrains.lyagaev.popularlibraries
+package ru.geekbrains.lyagaev.popularlibraries.repository
 
 import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Observable

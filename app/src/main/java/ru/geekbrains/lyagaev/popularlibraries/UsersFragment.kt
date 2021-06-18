@@ -10,10 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import ru.geekbrains.lyagaev.popularlibraries.adapter.UsersRVAdapter
 import ru.geekbrains.lyagaev.popularlibraries.presenter.UsersPresenter
 import ru.geekbrains.lyagaev.popularlibraries.view2.UsersView
 import ru.geekbrains.lyagaev.popularlibraries.databinding.FragmentUsersBinding
 import ru.geekbrains.lyagaev.popularlibraries.navigation.AndroidScreens
+import ru.geekbrains.lyagaev.popularlibraries.network.ApiHolder
+import ru.geekbrains.lyagaev.popularlibraries.repository.RetrofitGithubUsersRepo
 import ru.geekbrains.lyagaev.popularlibraries.utils.ConverterImage
 import ru.geekbrains.lyagaev.popularlibraries.utils.Image
 
@@ -23,7 +26,12 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         fun newInstance() = UsersFragment()
     }
 
-    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(GithubUsersRepo(), App.instance.router, AndroidScreens(), ConverterImage(context), AndroidSchedulers.mainThread()) }
+    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(
+        RetrofitGithubUsersRepo(ApiHolder.api),
+        App.instance.router,
+        AndroidScreens(),
+        ConverterImage(context),
+        AndroidSchedulers.mainThread()) }
     var adapter: UsersRVAdapter? = null
 
     private var vb: FragmentUsersBinding? = null
@@ -40,7 +48,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(presenter.usersListPresenter)
+        adapter = UsersRVAdapter(presenter.usersListPresenter, GlideImageLoader())
         vb?.rvUsers?.adapter = adapter
 
         vb?.btnConverter?.setOnClickListener {

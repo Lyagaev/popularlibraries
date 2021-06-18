@@ -1,9 +1,12 @@
 package ru.geekbrains.lyagaev.popularlibraries.model
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.google.gson.annotations.Expose
 
-@Parcelize
+@kotlinx.android.parcel.Parcelize
 data class GithubUser(
-    val login: String
+    @Expose val id: String? = null,
+    @Expose val login: String? = null,
+    @Expose val avatarUrl: String? = null,
+    @Expose val reposUrl: String? = null
 ) : Parcelable

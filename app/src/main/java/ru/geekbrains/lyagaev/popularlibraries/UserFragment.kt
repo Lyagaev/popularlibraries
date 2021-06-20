@@ -13,13 +13,10 @@ import ru.geekbrains.lyagaev.popularlibraries.model.GithubUser
 import ru.geekbrains.lyagaev.popularlibraries.presenter.UserPresenter
 import ru.geekbrains.lyagaev.popularlibraries.view2.UserView
 import ru.geekbrains.lyagaev.popularlibraries.databinding.FragmentUserBinding
-import ru.geekbrains.lyagaev.popularlibraries.navigation.AndroidScreens
 import ru.geekbrains.lyagaev.popularlibraries.network.ApiHolder
-import ru.geekbrains.lyagaev.popularlibraries.presenter.UsersPresenter
 import ru.geekbrains.lyagaev.popularlibraries.repository.RetrofitGithubRepositoriesRepo
-import ru.geekbrains.lyagaev.popularlibraries.repository.RetrofitGithubUsersRepo
+import ru.geekbrains.lyagaev.popularlibraries.room.RoomGithubRepositoryCache
 import ru.geekbrains.lyagaev.popularlibraries.room.db.Database
-import ru.geekbrains.lyagaev.popularlibraries.utils.ConverterImage
 
 class UserFragment : MvpAppCompatFragment(), UserView {
     private lateinit var binding: FragmentUserBinding
@@ -31,7 +28,9 @@ class UserFragment : MvpAppCompatFragment(), UserView {
 
     val presenter: UserPresenter by moxyPresenter { UserPresenter(
         RetrofitGithubRepositoriesRepo(ApiHolder.api, AndroidNetworkStatus(requireContext()),
-            Database.getInstance()),
+            RoomGithubRepositoryCache(Database.getInstance())
+            //Database.getInstance()
+                    ),
         App.instance.router,
         user,
         AndroidSchedulers.mainThread()) }

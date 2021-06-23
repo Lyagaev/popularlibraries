@@ -7,7 +7,7 @@ import ru.geekbrains.lyagaev.popularlibraries.model.GithubUser
 
 class GithubUsersRepo {
 
-    private val repositories =  Single.just(listOf(
+   /* private val repositories =  Single.just(listOf(
             GithubUser("login1"),
             GithubUser("login2"),
             GithubUser("login3"),
@@ -16,6 +16,6 @@ class GithubUsersRepo {
             )
     )
 
-    fun getUsers(): @NonNull Single<List<GithubUser>>? = repositories
+    fun getUsers(): @NonNull Single<List<GithubUser>>? = repositories*/
 
 }

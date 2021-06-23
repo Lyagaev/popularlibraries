@@ -17,6 +17,8 @@ import ru.geekbrains.lyagaev.popularlibraries.databinding.FragmentUsersBinding
 import ru.geekbrains.lyagaev.popularlibraries.navigation.AndroidScreens
 import ru.geekbrains.lyagaev.popularlibraries.network.ApiHolder
 import ru.geekbrains.lyagaev.popularlibraries.repository.RetrofitGithubUsersRepo
+import ru.geekbrains.lyagaev.popularlibraries.room.RoomGithubUserCache
+import ru.geekbrains.lyagaev.popularlibraries.room.db.Database
 import ru.geekbrains.lyagaev.popularlibraries.utils.ConverterImage
 import ru.geekbrains.lyagaev.popularlibraries.utils.Image
 
@@ -26,8 +28,14 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         fun newInstance() = UsersFragment()
     }
 
-    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(
-        RetrofitGithubUsersRepo(ApiHolder.api),
+    val presenter: UsersPresenter by moxyPresenter {
+        UsersPresenter(
+        RetrofitGithubUsersRepo(
+            ApiHolder.api,
+            AndroidNetworkStatus(requireContext()),
+            RoomGithubUserCache(Database.getInstance())
+        ),
+            //Database.getInstance()),
         App.instance.router,
         AndroidScreens(),
         ConverterImage(context),
